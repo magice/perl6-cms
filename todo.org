@@ -1,0 +1,9 @@
+* TODO CMS
+* TODO HTTP server
+* TODO Task Manager
+** TODO TaskManager itself
+** TODO ThreadPool
+* TODO unit tests
+** describe, it, before-each, before-all
+** Run test and store statistics
+** report
