@@ -1,19 +1,22 @@
+unit module markdown;
 
-grammar MarkDownParagraph {
-    regex TOP { .+ <paragraph_end> }
-    token paragraph_end { || \n \s* \n
-                          || $ }
-
-}
-
-grammar MarkDown {
-    regex TOP { <part>+ }
-    regex part { [
+grammar MarkDown is export {
+    token TOP { [
                        || <shebang>
                        || <comment>
-                       || <paragraph>
-                 ]+ }
-    regex shebang { \s* '#!' \N+ [\n | $] }
-    regex comment { \s* '#' \N+ [\n | $] }
-    regex paragraph { <MarkDownParagraph::TOP> }
+                       || <part>
+                 ]* }
+    token shebang { \s* '#!' \N+ <.lineend> }
+    token comment { \s* '//' \N+ <.lineend> }
+    proto regex part         {*}
+          regex part:sym<header> {
+              '#'+                       # opening '##'
+              \N+                        # other stuffs
+          }
+          regex part:sym<unordered_list> {
+              <unordered_item>+
+          }
+
+    token unordered_item { \s* '*' \s+ \N+ <.lineend> }
+    token lineend { [\n | $] }
 }
